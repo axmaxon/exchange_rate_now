@@ -11,4 +11,25 @@ RSpec.describe ExchangeRate, type: :model do
   describe 'database columns' do
     it { should have_db_column(:rate).of_type(:decimal) }
   end
+
+  describe '.current_rate' do
+    let!(:forced_exchange_rate) { create(:forced_exchange_rate, expiration_datetime: 1.day.since) }
+    let!(:exchange_rate) { create(:exchange_rate) }
+
+    context 'when forced exchange rate is no expired' do
+      it 'returns the rate of the forced exchange rate' do
+        expect(ExchangeRate.current_rate).to eq(forced_exchange_rate.rate)
+      end
+    end
+
+    context 'when forced exchange rate is expired' do
+      before do
+        forced_exchange_rate.update(expiration_datetime: 1.day.ago)
+      end
+
+      it 'returns the rate of the latest exchange rate' do
+        expect(ExchangeRate.current_rate).to eq(exchange_rate.rate)
+      end
+    end
+  end
 end
