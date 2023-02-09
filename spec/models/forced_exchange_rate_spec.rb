@@ -13,4 +13,23 @@ RSpec.describe ForcedExchangeRate, type: :model do
     it { should have_db_column(:rate).of_type(:decimal) }
     it { should have_db_column(:expiration_datetime).of_type(:datetime) }
   end
+
+  describe '.current' do
+    context 'when last rate with an expiration datetime in the future' do
+      let!(:first_valid_rate) { create(:forced_exchange_rate, expiration_datetime: 1.day.since) }
+      let!(:second_valid_rate) { create(:forced_exchange_rate, expiration_datetime: 2.day.since) }
+
+      it 'returns the most recent rate with an expiration datetime in the future' do
+        expect(ForcedExchangeRate.current).to eq(second_valid_rate)
+      end
+    end
+
+    context 'when rate with an expiration datetime in the past' do
+      let!(:expired_rate) { create(:forced_exchange_rate, expiration_datetime: 1.day.ago) }
+
+      it 'ignores rates with an expired expiration datetime' do
+        expect(ForcedExchangeRate.current).to_not eq(expired_rate)
+      end
+    end
+  end
 end
