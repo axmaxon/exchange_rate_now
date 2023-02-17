@@ -35,6 +35,8 @@ module ExchangeRateNow
     # Don't generate system test files.
     config.generators.system_tests = nil
 
+    config.active_job.queue_adapter = :sidekiq
+
     config.generators do |g|
       g.test_framework :rspec
       g.routing_specs false
