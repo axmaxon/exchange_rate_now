@@ -7,6 +7,7 @@ class ExchangeRateService
     def call
       rate = fetch_actual_rate
       save_rate_to_database(rate)
+      broadcast_rate_change
     end
 
     private
@@ -23,6 +24,10 @@ class ExchangeRateService
 
     def save_rate_to_database(rate)
       ExchangeRate.create(rate: rate)
+    end
+
+    def broadcast_rate_change
+      ActionCable.server.broadcast('exchange_rate_channel', rate: ExchangeRate.current_rate)
     end
   end
 end

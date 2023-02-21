@@ -2,15 +2,16 @@ require 'rails_helper'
 
 RSpec.describe ExchangeRateService do
   describe '.call' do
-    it 'fetches and saves the current exchange rate' do
+    it 'fetches, saves and broadcasts the current exchange rate' do
       allow(ExchangeRateService).to receive(:fetch_actual_rate).and_return(88.55)
       expect(ExchangeRateService).to receive(:save_rate_to_database).with(88.55)
+      expect(ExchangeRateService).to receive(:broadcast_rate_change)
       ExchangeRateService.call
     end
   end
 
   describe '.fetch_actual_rate' do
-    let(:date) { Date.current.strftime("%d/%m/%Y") }
+    let(:date) { Date.current.strftime('%d/%m/%Y') }
     let(:response_body) {
       <<-XML
         <?xml version="1.0" encoding="windows-1251"?>
