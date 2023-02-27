@@ -10,6 +10,7 @@ class ForcedExchangeRatesController < ApplicationController
 
     if new_exchange_rate.save
       broadcast_rate_change
+      set_broadcasting_after_expiration(new_exchange_rate.expiration_datetime)
 
       redirect_to admin_path, notice: "Сохранено"
     else
