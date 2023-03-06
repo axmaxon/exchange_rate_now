@@ -1,1 +1,12 @@
-body { background-color: azure;}
+@import '~bootstrap/scss/bootstrap.scss';
+@import 'flash-messages';
+@import 'air-datepicker-overrides';
+
+.link-no-underline {
+  text-decoration: none;
+  font-size: 0.7rem;
+}
+
+.form-control {
+  width: 70%;
+}

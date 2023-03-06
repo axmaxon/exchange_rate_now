@@ -1,11 +1,14 @@
-<h1>Приветствуем Вас!</h1>
-
-<p>Текущий курс доллара:</p>
-
-<p style="color: red;">
-  <span id="exchange-rate">
-    <%= @current_rate if @current_rate %>
-  </span>
-</p>
-
-<%= link_to 'Ввести форсированный курс', admin_path, data: { turbolinks: false } %>
+<div class="container py-5">
+  <div class="row justify-content-center">
+    <div class="col-12 col-md-8 col-lg-6">
+      <div class="card border-0 shadow-lg">
+        <div class="card-body text-center">
+          <h1 class="mb-4">USD/RUB</h1>
+          <p class="lead mb-4">Доллар США - Российский рубль:</p>
+          <h2 class="display-4 mb-4"><span id="exchange-rate"><%= @current_rate if @current_rate %></span></h2>
+          <%= link_to '- Ввести форсированный курс -', admin_path, class: "link-no-underline link-primary", data: { turbolinks: false } %>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
